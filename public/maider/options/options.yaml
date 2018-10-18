@@ -1,0 +1,799 @@
+options:
+  general:
+
+    - name: Site Title
+      option_key:  blogname
+      description: This is the field for the title of your blog. If you enabled your theme to display the blog title instead of an image, this is what displays on the front end.
+      examples:
+      - Bad Wolf's Bed and Breakfast
+      - Left Turn
+      - Weekly State Roundup
+      default: 'My Blog'
+      data_type: String
+
+
+    - name: Tagline
+      option_key:  blogdescription
+      description: The tagline for your site goes here. This field shows up only if you have enabled this option in your theme
+      examples:
+      - We come from the future.
+      - Map your path to grow your business
+      default: 'Just another WordPress site'
+      data_type: String
+
+
+    - name: Timezone
+      option_key:  gmt_offset
+      description: This option refers to the timezone your site is in, differing from the default zero value for GMT (Greenwich Mean Time). You can enter in a number in the negatives if you need to in order to adjust your timezone correctly.
+      examples:
+      - '-6: GMT -6 (aka Central Time, USA)'
+      - '0:  GMT (aka Greenwich Mean Time)'
+      default: 0
+      data_type: Integer
+
+
+    - name: Administrator Email (E-mail Address)
+      option_key:  admin_email
+      description: This is simply the email address for the administrator of the site where standard WordPress emails are sent
+      examples:
+      - me@cnn.com
+      - randomguy@yahoo.com
+      default: you@example.com
+      data_type: String
+
+
+    - name: WordPress address (URL)
+      option_key:  siteurl
+      description: This is a site’s base address. The main site won’t have a trailing slash
+      examples:
+      - https://www.example.com
+      - https://example.com/a-random-subdirectory
+      default:
+      data_type: String
+
+
+    - name: Site address (URL)
+      option_key:  home
+      description: This option is for the URL of your homepage, the first page you want users to see when they type in your domain. The link you enter into this field ends up being the page that’s loaded
+      examples:
+      - https://www.example.com
+      - https://www.example.com/2018/02/sample-post
+      - https://example.com/homepage
+      default:
+      data_type: String
+
+
+    - name: Membership
+      option_key:  users_can_register
+      description: Enable user registration in WordPress to allow users to add posts, or comment, or perform other actions on your website. Need to set up default_role if using this
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: New User Default Role
+      option_key:  default_role
+      description: This field sets the default role for newly registered users.
+      allowed_values:
+        subscriber: (default)
+        administrator:
+        editor:
+        author:
+        contributor:
+      default: subscriber
+      data_type: String
+
+
+    - name: Timezone
+      option_key:  timezone_string
+      description: The timezone selected in the dashboard unless a GMT offset timezone is selected. timezone_string actually overrides gmt_offset. see http://php.net/manual/en/timezones.php for all possibilities
+      examples:
+      - http://php.net/manual/en/timezones.php
+      - America/Indianapolis
+      - America/Chicago
+      - Africa/Casablanca
+      default: null
+      data_type: String
+
+
+    - name: Date Format
+      option_key:  date_format
+      description: You can choose exactly how you want the date displayed when posts and pages are published.
+      examples:
+      - https://codex.wordpress.org/Formatting_Date_and_Time
+      - F j, Y -> February 7, 2008
+      - d-m-y -> 07-02-08
+      - D j/n/Y -> Thu 7/2/2008
+      - jS of F Y -> 7th of February 2008
+      default: F j, Y
+      data_type: String
+
+
+    - name: Time Format
+      option_key:  time_format
+      description: Just like the Date Format option, this setting displays the time for published posts
+      examples:
+      - https://codex.wordpress.org/Formatting_Date_and_Time
+      - G:i:s -> 16:45:58
+      - g:i a -> 4:45 pm
+      default: g:i a
+      data_type: String
+
+
+    - name: Week Starts On
+      option_key:  start_of_week
+      description: This option sets the day that the week starts on for the site. Pick a day of the week
+      allowed_values:
+        0: Sunday
+        1: Monday (default)
+        2: Tuesday
+        3: Wednesday
+        4: Thursday
+        5: Friday
+        6: Saturday
+      default: 1
+      data_type: Integer
+
+
+  writing:
+
+    - name: 'Formatting: Use Smilies'
+      option_key:  use_smilies
+      description:  'This feature enables you to use smileys on posts and pages. Convert emoticons like :-) and :P to graphics when displayed'
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Formatting: Balance Tags'
+      option_key:  use_balanceTags
+      description:  Correct invalidly-nested XHTML automatically. Any tags you leave open are closed for you automatically.
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: Default Post Category
+      option_key:  default_category
+      description:  ID of the category that posts will be put in by default. The category must exist on the site first, and you must put in the number id of that category, for this to work
+      default: 1
+      examples:
+      - To find the ID of a category you want to use, go to Posts > Categories, then hover over the name of the category you would like to make the default option. At the bottom of your browser window, a link should be displayed.The Id can be found after category&tag_ID= in the URL string
+      data_type: Integer
+
+
+    - name: Default Post Format
+      option_key: default_post_format
+      description: This option sets the default for the post formats. Since WordPress version 3.1, you can choose between different types of posts you can publish. You don’t have to blog only text anymore.
+      allowed_values:
+        standard: (default)
+        aside:
+        chat:
+        gallery:
+        link:
+        image:
+        quote:
+        status:
+        video:
+        audio:
+      default: 0
+      data_type: String
+
+
+    - name: 'Mail Server: Url'
+      option_key:  mailserver_url
+      description: This is used for the URL of the server where your email address is stored. If you would like to make use of these settings but aren’t sure what to type here, consult your email provider or hosting company if you set up an email there.
+      examples:
+      - secure.emailsrvr.com
+      - mail.tin.it
+      - mail.example.com
+      default: 'mail.example.com'
+      data_type: String
+
+
+    - name: 'Mail Server: Port'
+      option_key:  mailserver_port
+      description:  Mail server port for posting to WordPress by e-mail. Check with your email provider on which one to use
+      examples:
+      - 995
+      - 110
+      default: 110
+      data_type: Integer
+
+
+    - name: 'Mailserver: Login Name'
+      option_key:  mailserver_login
+      description:  Mail server username for posting to WordPress by e-mail. Depending on your email set up , this can be an inbox name, user account or other
+      examples:
+      - person@example.com
+      - jason12345
+      default: 'login@example.com'
+      data_type: String
+
+
+    - name: 'Mailserver: password'
+      option_key:  mailserver_pass
+      description:  Mail server password for posting to WordPress by e-mail
+      examples:
+      - longpassword
+      - 1234HiMe!
+      default: 'password'
+      data_type: String
+
+
+    - name: Default Mail Category
+      option_key: default_email_category
+      description:  ID of the category that posts will be put in by default when written via e-mail. see default_category
+      examples:
+      - To find the ID of a category you want to use, go to Posts > Categories, then hover over the name of the category you would like to make the default option. At the bottom of your browser window, a link should be displayed.The Id can be found after category&tag_ID= in the URL string
+      default: 1
+      data_type: Integer
+
+
+    - name: Default Link Category
+      option_key:  default_link_category
+      description:  ID of the category that links will be put in by default . This field sets the default category for link posts. You can enter the ID of the category you would like these kinds of posts to be published under by default.
+      examples:
+      - To find the ID of a category you want to use, go to Posts > Categories, then hover over the name of the category you would like to make the default option. At the bottom of your browser window, a link should be displayed.The Id can be found after category&tag_ID= in the URL string
+      default: 2
+      data_type: Integer
+
+
+    - name: Update Services
+      option_key:  ping_sites
+      description: When you publish a new post, WordPress automatically notifies the following site update services. For more about this, see Update Services. Separate multiple service URLs with line breaks. Requires blog_public to have a value of 1. (possibly multi-line)
+      examples:
+      - http://blogsearch.google.com/ping/RPC2
+      - http://bblog.com/ping.php
+      - http://bitacoras.net/ping
+      default: 'http://rpc.pingomatic.com/'
+      data_type: String
+
+
+    - name: Use Trackbacks
+      option_key:  use_trackback
+      description:  Enable sending and receiving of trackbacks. You can enable or disable receiving trackbacks with this field.
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Default Image: Link Type'
+      option_key:  image_default_link_type
+      description: When you insert an image into a post by clicking the Add Media button above the post editor, you can select the destination of the image when it’s clicked under the drop down box named Link to. This field sets the default type of link that’s selected in the drop down box.
+      allowed_values:
+        file:
+        post:
+        custom:
+        none:
+      default: 'none'
+      data_type: String
+
+
+    - name: 'Default Image: Size'
+      option_key:  image_default_size
+      allowed_values:
+      - thumbnail
+      - medium
+      - large
+      description: "You can set the default size for images being inserted to a post or page. Set one of below or Custom size: https://codex.wordpress.org/Function_Reference/add_image_size"
+      default: null
+      data_type: String
+
+
+    - name: 'Default Image: Alignment'
+      option_key:  image_default_align
+      description: This options sets your prefered image alignment as default.
+      allowed_values:
+        left:
+        right:
+        center:
+        none:
+      default: null
+      data_type: String
+
+
+      # Note, if default is empty, the value is not set automatically if not included
+      # Note: examples or allowed_values is given, but not both
+
+
+  reading:
+
+    - name: 'Front page displays: Show On Front'
+      option_key:  show_on_front
+      description: What to show on the front page
+      allowed_values:
+        posts: Your latest posts (default)
+        page: A static page (see page_on_front)
+      default: posts
+      data_type: String
+
+
+    - name: 'Front page displays: Page On Front'
+      option_key:  page_on_front
+      description: The ID of the page that should be displayed on the front page. Requires show_on_front's value to be page.
+      examples:
+      -  To find a post id, click Edit on the post. Then, when you see the WordPress Editor, look for the number in the actual URL of the page you’re on. For posts and pages, you should see post=NUMBER. That NUMBER is the post id
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Front page displays: Page For Posts'
+      option_key:  page_for_posts
+      description: The ID of the page that displays posts. Useful when show_on_front's value is page.
+      examples:
+      - To find a page id, click Edit on the page. Then, when you see the WordPress Editor, look for the number in the actual URL of the page you’re on. For posts and pages, you should see post=NUMBER. That NUMBER is the page id
+      default: 0
+      data_type: Integer
+
+
+    - name: Blog pages show at most _ Posts per page
+      option_key:  posts_per_page
+      description: Show at most x many posts on blog pages.
+      examples:
+      - 5
+      - 9
+      - 20
+      default: 10
+      data_type: Integer
+
+
+    - name: Syndication feeds show the most recent in the rss
+      option_key:  posts_per_rss
+      description: Show at most x many posts in RSS feeds.
+      examples:
+      - 5
+      - 9
+      - 20
+      default: 10
+      data_type: Integer
+
+
+    - name: 'RSS Use Excerpt: For each article in a feed, show'
+      option_key:  rss_use_excerpt
+      description: Show an excerpt instead of the full text of a post in RSS feeds
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Make Blog Public: Search Engine Visibility'
+      option_key:  blog_public
+      allowed_values:
+        1: I would like my blog to be visible to everyone, including search engines (like Google, Sphere, Technorati) and archivers. (default)
+        0: I would like to block search engines, but allow normal visitors.
+      default: 1
+      data_type: Integer
+
+
+    - name: Blog Charset
+      option_key:  blog_charset
+      description: Encoding for pages and feeds. The character encoding you write your blog in (UTF-8 is recommended).
+      example:
+      - UTF-8
+      - big5
+      - iso-8859-1
+      default: 'UTF-8'
+      data_type: String
+
+
+  discussion:
+
+    - name: 'Default article settings: Pingback Flag'
+      option_key:   default_pingback_flag
+      description: Attempt to notify any blogs linked to from the article (slows down posting).
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Default article settings: Ping Status'
+      option_key:   default_ping_status
+      description: Allow link notifications from other blogs (pingbacks and trackbacks).
+      allowed_values:
+        open: Allow pingbacks and trackbacks from other blogs (default)
+        closed: Disallow pingbacks and trackbacks from other blogs
+      default: open
+      data_type: String
+
+
+    - name: 'Default article settings: Comment Status'
+      option_key:   default_comment_status
+      description:   Allow comments (can be overridden with individual posts)
+      allowed_values:
+        open: Allow comments (default)
+        closed: Disallow comments
+      default: open
+      data_type: String
+
+
+    - name: 'Other comment settings: Require Name and Email'
+      option_key:  require_name_email
+      description: Before a comment appears, the comment author must fill out his/her name and email.
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Comment Registration'
+      option_key:  comment_registration
+      description: Users must be registered and logged in to comment
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Close Comments for Old Posts'
+      option_key:  close_comments_for_old_posts
+      description: Automatically close comments on old articles
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Close Comments Days Old'
+      option_key:  close_comments_days_old
+      description: Automatically close comments on articles older than x days
+      examples:
+      - 1
+      - 2
+      - 7
+      - 30
+      default: 14
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Native Comment System'
+      option_key:  thread_comments
+      description: With this option, you can enable or disable the WordPress native threaded (nested) comments system
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Thread Comments Depth'
+      option_key:  thread_comments_depth
+      description: Set the number of threading levels for comments.
+      allowed_values:
+        1: level
+        2: level
+        3: level
+        4: level
+        5: level
+        6: level
+        7: level
+        8: level
+        9: level
+        10: level
+      default: 5
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Page Comments'
+      option_key:  page_comments
+      description: Break comments into pages
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Comments Per Page'
+      option_key: comments_per_page
+      description: Comments per Page
+      examples:
+      - 10
+      - 20
+      - 50
+      default: 50
+      data_type: Integer
+
+
+    - name: 'Other comment settings: Default Comments Page'
+      option_key:  default_comments_page
+      description: "Select whether the first or last page of comments should be displayed first"
+      allowed_values:
+        first:
+        last:
+      default: 'newest'
+      data_type: String
+
+
+    - name: 'Other comment settings: Comment Order'
+      description: Changes how the comments are ordered in each page
+      option_key:  comment_order
+      allowed_values:
+        asc: (default)
+        desc:
+      default: asc
+      data_type: String
+
+
+    - name: 'E-mail me whenever: New Comments'
+      option_key:   comments_notify
+      description: E-mail me when anyone posts a comment.
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'E-mail me whenever: New Moderation'
+      option_key:   moderation_notify
+      description: E-mail me when a comment is held for moderation.
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Before a comment appears: Must be Moderated'
+      option_key:   comment_moderation
+      description: Before a comment appears, an administrator must always approve the comment.
+      allowed_values:
+        1: Yes
+        0: False (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: 'Before a comment appears: Must have Commented Previously'
+      option_key:  comment_whitelist
+      description: Comment author must have a previously approved comment before their comment will show up
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Comment Moderation: Hold If More Links Than'
+      option_key: comment_max_links
+      description: Hold a comment in the queue if it contains the value of this option or more.
+      examples:
+      - 1
+      - 2
+      - 4
+      default: 2
+      data_type: Integer
+
+
+    - name: 'Comment Moderation: Hold If Contains'
+      option_key:   moderation_keys
+      description: When a comment contains any of these words in its content, name, URL, e-mail, or IP, it will be held in the moderation queue. One word or IP per line. It will match inside words, so "press" will match "WordPress." (possibly multi-line)
+      example:
+      - "bad\nwords\nhere"
+      default: null
+      data_type: String
+
+
+    - name: Comment Blacklist
+      option_key: blacklist_keys
+      description:  When a comment contains any of these words in its content, name, URL, e-mail, or IP, it will be marked as spam. One word or IP per line. It will match inside words, so "press" will match "WordPress."
+      example:
+      - "politics"
+      default: null
+      data_type: String
+
+
+    - name: Show Avitars
+      option_key:  show_avatars
+      description: Avatar Display
+      allowed_values:
+        1: (default) Show Avatars
+        0: Do not show Avatars
+      default: 1
+      data_type: Integer
+
+
+    - name: Maximum Rating
+      option_key:  avatar_rating
+      description: Maximum Rating For the Avatar Pictures Allowed on this Site
+      allowed_values:
+        G: (default) Suitable for all audiences
+        PG: Possibly offensive, usually for audiences 13 and above
+        R: Intended for adult audiences above 17
+        X: Even more mature than above
+      default: G
+      data_type: String
+
+
+    - name: Default Avatar
+      option_key:  avatar_default
+      description: Default Avatar
+      allowed_values:
+        mystery: (default) Mystery Man
+        blank: Blank
+        gravatar_default: Gravatar Logo
+        identicon: Identicon (Generated)
+        wavatar: Wavatar (Generated)
+        monsterid: MonsterID (Generated)
+        retro: Retro (Generated)
+      default: mystery
+      data_type: String
+
+
+  media:
+
+    - name: 'Thumbnail Size: Width'
+      option_key:  thumbnail_size_w
+      description: The Width of the Thumbnail images (in pixels)
+      examples:
+      - 64
+      - 200
+      default: 150
+      data_type: Integer
+
+
+    - name: 'Thumbnail Size: Height'
+      option_key:  thumbnail_size_h
+      description: The Height of the Thumbnail images (in pixels)
+      examples:
+      - 64
+      - 200
+      default: 150
+      data_type: Integer
+
+
+    - name: 'Thumbnail Size: Crop'
+      option_key:  thumbnail_crop
+      description: Crop thumbnail to exact dimensions (normally thumbnails are proportional)
+      allowed_values:
+        1: Yes (default)
+        0: No
+      default: 1
+      data_type: Integer
+
+
+    - name: 'Medium Size: Width'
+      option_key:  medium_size_w
+      description: The size of the width of medium images on this site, in pixels
+      examples:
+      - 300
+      - 400
+      default: 300
+      data_type: Integer
+
+
+    - name: 'Medium Size: Height'
+      option_key:  medium_size_h
+      description: The size of the hight of medium images on this site, in pixels
+      examples:
+      - 300
+      - 400
+      default: 300
+      data_type: Integer
+
+
+    - name: 'Large Size: Width'
+      option_key:  large_size_h
+      description: The size of medium images on this site, in pixels
+      examples:
+      - 900
+      - 1024
+      - 1500
+      default: 1024
+      data_type: Integer
+
+
+    - name: 'Large Size: Height'
+      option_key:  large_size_h
+      description: The size of medium images on this site, in pixels
+      examples:
+      - 900
+      - 1024
+      - 1500
+      default: 1024
+      data_type: Integer
+
+
+    - name: 'Uploading Files: Type of Folders'
+      option_key:  uploads_use_yearmonth_folders
+      description: Organize my uploads into month- and year-based folders
+      allowed_values:
+        1: Yes (default)
+        0: No (default for safe mode)
+      default: 1
+      data_type: Integer
+
+
+  permalinks:
+
+    - name: Permalink Settings
+      option_key:  permalink_structure
+      description: "The desired structure of your blog's permalinks. Some examples: /%year%/%monthnum%/%day%/%postname%/ : Date and name based . /archives/%post_id%/ : Numeric, /%postname%/ : Post name-based. You can see more examples by viewing Using Permalinks."
+      examples:
+      - /%year%/%monthnum%/%day%/%postname%/
+      - /archives/%post_id%/
+      - /%postname%/
+      default: null
+      data_type: String
+
+
+    - name: Category Base
+      option_key:  category_base
+      description: The default category base of your blog categories permalink. You can choose the slug to use for the base of your category names
+      examples:
+      - www.your-site.com/category_base/category_name
+      default: null
+      data_type: String
+
+
+    - name: Tag Base
+      option_key:  tag_base
+      description: The default tag base for your blog tags permalink.  You can choose the slug to use for the base of your tag names
+      examples:
+      - www.your-site.com/tag_base/tag_name
+      default: null
+      data_type: String
+
+
+  miscellaneous:
+
+    - name: Use Hack File
+      option_key:  hack_file
+      description: Use legacy my-hacks.php file support
+      allowed_values:
+        1: Yes
+        0: No (default)
+      default: 0
+      data_type: Integer
+
+
+    - name: Site Mime Type
+      option_key:  html_type
+      description: Default MIME type for blog pages (text/html, text/xml+html, etc.)  (MIME type)
+      examples:
+      - text/html
+      - text/xml+html
+      default: 'text/html'
+      data_type: String
+
+
+    - name: Upload Subfolder
+      option_key:  upload_path
+      description: Store uploads in this folder (relative to the WordPress root)  (relative path)
+      examples:
+      - uploads
+      - pictures
+      default: null
+      data_type: String
+
+
+    - name: Uploads URL
+      option_key:  upload_url_path
+      description: URL path to upload folder (will be blank by default - Editable in All Settings Screen.  (URL path)
+      examples:
+      - https://www.example.com/uploads
+      data_type: String
+      default:
+
+
+
+
+
+
+

@@ -113,6 +113,8 @@ class Plugin_Public
 
     public function shortcut_code()
     {
+    	global $is_wp_init_called;
+	    $is_wp_init_called = true;
         add_shortcode($this->plugin_name, array($this, 'manage_shortcut'));
 
     }
@@ -160,41 +162,383 @@ class Plugin_Public
     }
 
 
+	/**
+	 * @param $continue
+	 * @param \WP $wp
+	 * @param $extra_query_vars
+	 *
+	 * @return mixed
+	 */
 	public function do_parse_request($continue, /** @noinspection PhpUnusedParameterInspection */
 		\WP $wp, /** @noinspection PhpUnusedParameterInspection */
 		$extra_query_vars) {
+
+		/** @noinspection PhpIncludeInspection */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/maider/config/class-config.php';
+		/** @noinspection PhpIncludeInspection */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'lib/JsonHelper.php';
+		/** @noinspection PhpIncludeInspection */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'lib/Input.php';
+
 		global /** @noinspection PhpUnusedLocalVariableInspection */
 		$wpdb;
-		if ( preg_match( '~(.*)\\/'.strtolower( PLUGIN_NAME) .'\\/command-(.*)$~', $_SERVER['REQUEST_URI'],$matches ) ) {
+
+		$url_parts = parse_url($_SERVER['REQUEST_URI']);
+		$url_path =  $url_parts['path'];
+
+
+		if ( preg_match( '~(.*)\\/'.strtolower( PLUGIN_NAME) .'\\/command-(.*)$~', $url_path,$matches ) ) {
 			$extra_info =  trim($matches[2]);
-			if (empty($extra_info)) {
-				//if reached here then things work, just return 200
-				http_response_code(200);
-				//get the number of logs
-				die();
-			}
-			if (strcmp($extra_info,'stats') === 0) {
-				$b_ok = true;
-				try {
-					$queue_resp = "Working";
-				} catch (\Exception $e) {
-					$queue_resp = $e->getMessage();
-					$b_ok = false;
+
+			$b_json = false;
+			try {
+				$return_type = Input::get( 'format', 'text' );
+
+				switch ( $return_type ) {
+					case 'json':
+						{
+							$b_json = true;
+						}
+					case 'text':
+						{
+							break;
+						}
+					default:
+						{
+							JsonHelper::printErrorJSONAndDie( "the format http param needs to be either text or json, with the default as text" );
+						}
+				}
+
+				//open up the configs
+				$config_yaml_path = realpath( dirname( __FILE__ ) . "/../config/config.yaml" );
+				if ( ! $config_yaml_path ) {
+					throw new \Exception( "Cannot find the config file path at ../config/config.yaml " );
+				}
+
+				$config = new Config($config_yaml_path,$extra_info);
+				$secret_input = Input::get('secret',Input::THROW_IF_MISSING);
+				$config->check_secret_access($secret_input) ;
+				//if got here then authorized
+
+				if ( strcmp( $extra_info, 'status' ) === 0 ) {
+					try {
+
+						$what = 'working';
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+
+				if ( strcmp( $extra_info, 'help' ) === 0 ) {
+					try {
+						$what = [
+							[ 'command'     => 'logs',
+							  'description' => 'lists all the logs'
+							],
+							[ 'command'     => 'clear-logs',
+							  'description' => 'truncates the log'
+							],
+							[ 'command'     => 'run',
+							  'description' => 'run the updating of options, plugins and themese'
+							],
+							[ 'command'     => 'list-config',
+							  'description' => 'displays the processed configeration, which is ready to run'
+							],
+							[ 'command'     => 'list-config-raw',
+							  'description' => 'displays the configeration before its processed. Will not process the config first'
+							],
+
+
+							[ 'command'     => 'list-available-options',
+							  'description' => 'lists the options that can be changed by this plugin'
+							],
+							[ 'command'     => 'list-unused-options',
+							  'description' => 'lists the options that will not be changed by this plugin'
+							],
+							[ 'command'     => 'check-defaults-with-current',
+							  'description' => 'gives a list of everything in the set options which are different from the defaults'
+							],
+							[ 'command' => 'help', 'description' => 'This help command' ]
+
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+
+				}
+
+				if ( strcmp( $extra_info, 'logs' ) === 0 ) {
+					try {
+
+						$what = $config->log->get_log_results();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+
+				if ( strcmp( $extra_info, 'clear-logs' ) === 0 ) {
+					try {
+
+						$config->log->clear_logs();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( "logs cleared" );
+						} else {
+							JsonHelper::print_nice( "logs cleared" );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+				
+
+				if ( strcmp( $extra_info, 'run' ) === 0 ) {
+					try {
+
+						$config->run();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( 'ran operation. Do logs command to see the logs' );
+						} else {
+							JsonHelper::print_nice( 'ran operation. Do logs command to see the logs' );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
 				}
 
 
+				if ( strcmp( $extra_info, 'list-config' ) === 0 ) {
+					try {
+
+						$what          = $config->get_config();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+
+				if ( strcmp( $extra_info, 'list-config-raw' ) === 0 ) {
+					try {
+
+						$what          = $config->get_raw_config();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+
+				if ( strcmp( $extra_info, 'list-available-options' ) === 0 ) {
+					try {
+
+						$what          = $config->get_options()->get_options();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+
+				}
+
+				if ( strcmp( $extra_info, 'list-unused-options' ) === 0 ) {
+					try {
+						$what          = $config->get_options()->get_unavaliable_options();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+
+				}
+
+				if ( strcmp( $extra_info, 'check-defaults-with-current' ) === 0 ) {
+					try {
+
+						$what          = $config->get_options()->do_wp_test_with_defaults();
+						if ( $b_json ) {
+							JsonHelper::printStatusJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					} catch ( \Exception $e ) {
+						$queue_resp = $e->getMessage();
+						$what       = [
+							'status'  => 'error',
+							'message' => $queue_resp
+						];
+
+						if ( $b_json ) {
+							JsonHelper::printErrorJSONAndDie( $what );
+						} else {
+							JsonHelper::print_nice( $what );
+						}
+						die();
+					}
+				}
+
 				$what = [
-					'status' => $b_ok,
-					'queue_status' =>$queue_resp
+					'status'  => 'error',
+					'message' => "unknown command: $extra_info"
 				];
 
-				http_response_code(200);
-				echo json_encode($what);
+				if ( $b_json ) {
+					JsonHelper::printErrorJSONAndDie( $what );
+				} else {
+					JsonHelper::print_nice( $what );
+				}
+				die();
+			}//end try block
+			catch (\Exception $fe) {
+				$what = [
+					'status'  => 'error',
+					'message' => $fe->getMessage()
+				];
+
+				if ( $b_json ) {
+					JsonHelper::printErrorJSONAndDie( $what );
+				} else {
+					JsonHelper::print_nice( $what );
+				}
 				die();
 			}
-			//convert it to a query string
 
-			die();
 		}
 
 		return $continue;

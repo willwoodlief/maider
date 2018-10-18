@@ -1,0 +1,25 @@
+this_plugin:
+  security_key: KabcD5534EUYyyt
+  delete_self: true
+  allow_remote: true
+
+user:
+  contact_person: Will Woodlief
+  contact_company: Texas Sofware
+  contact_url: 'https://texdevelopers.com'
+
+options:
+
+  - option_key: gmt_offset
+    option_value: __RESET__
+
+  - option_key: blogname
+    option_value: Will's Blog
+
+  - option_key: require_name_email
+    option_value: 1
+
+plugins: []
+
+themes: []
+

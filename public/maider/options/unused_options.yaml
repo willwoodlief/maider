@@ -1,0 +1,271 @@
+#reading
+deprecated:
+  note: These options are either completely ignored, or are marked as obsolete and should no longer be used.
+  options:
+
+  - name: Allow GZip Compression
+    option_key:  gzipcompression
+    description: WordPress should compress articles (with gzip) if browsers ask for them.
+    allowed_values:
+      1 : Yes
+      0 : No (default)
+    default: 0
+    data_type: Integer
+
+  - name:
+    option_key:  rss_language
+    description: Language for RSS feeds (metadata purposes only), needs to be ISO two-letter language code
+    default: 'en'
+    data_type: String
+
+
+  - name: Lines in the post box
+    option_key:  default_post_edit_rows
+    description:  Size of the post box (in lines)
+    default: 10
+    data_type: Integer
+
+
+  - name: Enable Atom Publishing
+    option_key:  enable_app
+    description:  Enable the Atom Publishing Protocol
+    allowed_values:
+      1 : Yes
+      0 : No (default)
+    default: 0
+    data_type: Integer
+
+  - name: Enable XML-RPC publishing protocols
+    option_key:  enable_xmlrpc
+    description:  Enable the WordPress, Movable Type, MetaWeblog and Blogger XML-RPC publishing protocols
+    allowed_values:
+      1 : Yes
+      0 : No (default)
+    default: 0
+    data_type: Integer
+
+
+  - name: Embed all plain text urls
+    option_key:  embed_autourls
+    description: Attempt to automatically embed all plain text URLs
+    default: 1
+    data_type: Integer
+
+  - name: Width of Embedded
+    option_key:  embed_size_w
+    default: null
+    data_type: Integer
+
+  - name: Height of Embedded
+    option_key:  embed_size_h
+    default: 600
+    data_type: Integer
+
+
+
+  - name: Prepend Recently Updated Links
+    option_key:  links_recently_updated_prepend
+    default: ''
+    data_type: String
+
+  - name: Append Recently Updated Links
+    option_key:  links_recently_updated_append
+    default: ''
+    data_type: String
+
+  - name: Time limit of recently updated links
+    option_key:  links_recently_updated_time
+    default: 120
+    data_type: Integer
+
+  - name: Time Date format of Recently Updated Links
+    option_key:  links_updated_date_format
+    default: __('F j, Y g:i a')
+    data_type: String
+
+
+  - name: Secret Salt
+    option_key:  secret
+    description: Secret value created during installation used with salting, etc.  (MD5)
+    default: wp_generate_password(64)
+    data_type: String
+
+
+
+  - name: Track Update Times for Links
+    option_key:  use_linksupdate
+    description: Track links' update times
+    allowed_values:
+      1: Yes
+      0: No (default)
+    default: 0
+    data_type: Integer
+
+
+
+  - name: Advanced Edit
+    option_key:  advanced_edit
+    default: 0
+    data_type: Integer
+
+
+
+# the below are valid options, but are updated with complex data at run time and are not meant to be editable by humans
+not_editable:
+
+  note: These options are filled in by wordpress and are normally read only
+  options:
+
+  - name: Recently Edited
+    option_key:  recently_edited
+    default: null
+    data_type: Array
+
+  - name: Active Plugins
+    option_key:  active_plugins
+    description:  "Returns an array of strings containing the path of the main php file of the plugin. The path is relative to the plugins folder. An example of path in the array : 'myplugin/mainpage.php'."
+    default: []
+    data_type: Array
+
+  - name: Sidebar Widgets
+    option_key:  sidebars_widgets
+    description:  Returns array of sidebar states (list of active and inactive widgets)
+    default:
+    data_type: Array
+
+  - name: Sticky Posts
+    option_key:  sticky_posts
+    default:
+    data_type: Array
+
+  - name: Widget Categories
+    option_key:  widget_categories
+    default:
+    data_type: Array
+
+  - name: Widget Text
+    option_key:  widget_text
+    default:
+    data_type: Array
+
+  - name: Widget RSS
+    option_key:  widget_rss
+    default:
+    data_type: Array
+
+  - name: Template Slug
+    option_key:  template
+    description:  "The slug of the currently activated theme (how it is accessed by path, ex. /wp-content/themes/some-theme: some-theme would be the value)"
+    default: 'default'
+    data_type: String
+
+  - name: Stylesheet Slug
+    option_key: stylesheet
+    description:  "The slug of the currently activated stylesheet (style.css) (how it is accessed by path, ex. /wp-content/themes/some-style: some-style would be the value)"
+    default: 'default'
+    data_type: String
+
+multisite:
+  note: multisite options are about managing the different sites and how they are set up within a network of wordpress.This is outside the scope of this plugin, and are only for creating new sites
+  options:
+
+  - name: Registration Notification
+    option_key: registrationnotification
+    description: Registration notification  for new sites
+
+  - name: Registration
+    option_key: registration
+    description: Allow new site registrations
+
+  - name: Add New Users
+    option_key: add_new_users
+    description: Add New Users
+
+  - name: Menu Items
+    option_key: menu_items
+    description: Enable administration menus
+
+  - name: Upload Space Check Disabled
+    option_key: upload_space_check_disabled
+    description:  Site upload space check
+
+  - name: Blog Upload Space
+    option_key: blog_upload_space
+    description: Site upload space
+
+  - name: Upload Filetypes
+    option_key: upload_filetypes
+    description: Upload file types
+
+  - name: Site Name
+    option_key: site_name
+    description: Network Title
+
+  - name: First Oost
+    option_key: first_post
+    description: First Post inserted into a new site before the user ever logs in for the first time
+
+  - name: First Page
+    option_key: first_page
+    description: First Page before the user ever logs in for the first time
+
+  - name: First Comment
+    option_key: first_comment
+    description: First Comment before the user ever logs in for the first time
+
+  - name: First Comment Url
+    option_key: first_comment_url
+    description: First Comment URL before the user ever logs in for the first time
+
+  - name: First Comment Author
+    option_key: first_comment_author
+    description: First Comment Author before the user ever logs in for the first time
+
+  - name: Welcome Email
+    option_key: welcome_email
+    description:  Welcome Email
+
+  - name: Welcome User Email
+    option_key: welcome_user_email
+    description: Welcome User Email
+
+  - name: Max File Upload Size
+    option_key: fileupload_maxk
+    description: Max upload file size
+
+  - name: Global Terms Enabled
+    option_key: global_terms_enabled
+    description: Terms Enabled
+
+  - name: Banned Blog Names
+    option_key: illegal_names
+    description: Banned Names
+
+  - name: Limited Email Domains
+    option_key: limited_email_domains
+    description: Limited Email Registrations
+
+  - name: Banned Email Domains
+    option_key: banned_email_domains
+    description: Banned Email Domains
+
+  - name: Language of WordPress Install
+    option_key: WPLANG
+    description: Network Language
+
+  - name: Count of Blogs
+    option_key: blog_count
+    description: Blog Count
+
+  - name: Count of Users
+    option_key: user_count
+    description: User Count
+
+  - name: Stream Database Version
+    option_key: wp_stream_db
+    description: Stream Database Version
+
+
+
+
+

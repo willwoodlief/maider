@@ -1,0 +1,26 @@
+
+table.maider-option-table td {
+    border-bottom: rgba(128,128,128,.2) solid 1px;
+}
+
+table.maider-option-table span.maider-option-header {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+table.maider-option-table span.maider-option-key {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: darkblue;
+}
+table.maider-option-table span.maider-option-value {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: cadetblue;
+}
+
+table.maider-option-table span.maider-option-result {
+    font-size: 1.25em;
+    font-weight: bold;
+    color: black;
+}

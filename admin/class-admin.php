@@ -71,10 +71,10 @@ class Admin {
         if ($b_check !== false) {
 
 
-            wp_enqueue_script( $this->plugin_name.'a', plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'jquery' ), $this->version, false );
+            wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/admin.js', array( 'jquery' ), $this->version, false );
 
             $title_nonce = wp_create_nonce(strtolower( PLUGIN_NAME) . '_admin');
-            wp_localize_script(strtolower( PLUGIN_NAME), strtolower( PLUGIN_NAME) .'_backend_ajax_obj', array(
+            wp_localize_script($this->plugin_name, strtolower( PLUGIN_NAME) .'_backend_ajax_obj', array(
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'action' => strtolower( PLUGIN_NAME) .'_admin',
                 'nonce' => $title_nonce,
@@ -125,28 +125,22 @@ class Admin {
 
 	    add_settings_section(
 		    strtolower( PLUGIN_NAME). '_section_id', // ID
-		    'Click Funnel Integration Settings', // Title
+		    'Sets A List of Options, Plugins and Themes', // Title
 		    array( $this, 'print_section_info' ), // Callback
 		    strtolower( PLUGIN_NAME). '-options' // Page
 	    );
 
 
-	    add_settings_field(
-		    'redirect_url', // ID
-		    'Redirect', // Title
-		    array( $this, 'redirect_url_callback' ), // Callback
-		    strtolower( PLUGIN_NAME). '-options', // Page
-		    strtolower( PLUGIN_NAME). '_section_id' // Section
-	    );
 
 
-	    add_settings_field(
-		    'redirect_url', // ID
-		    'Access', // Title
-		    array( $this, 'test_blocked_ports_callback' ), // Callback
-		    strtolower( PLUGIN_NAME). '-options', // Page
-		    strtolower( PLUGIN_NAME). '_section_id' // Section
-	    );
+
+//	    add_settings_field(
+//		    'redirect_url', // ID
+//		    'Access', // Title
+//		    array( $this, 'test_blocked_ports_callback' ), // Callback
+//		    strtolower( PLUGIN_NAME). '-options', // Page
+//		    strtolower( PLUGIN_NAME). '_section_id' // Section
+//	    );
 
 
     }
@@ -237,32 +231,48 @@ class Admin {
 	}
 
     public function query_survey_ajax_handler() {
+	    /** @noinspection PhpIncludeInspection */
+	    require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/maider/config/class-config.php';
+	    /** @noinspection PhpIncludeInspection */
+	    require_once plugin_dir_path( dirname( __FILE__ ) ) . 'lib/JsonHelper.php';
+
         /** @noinspection PhpIncludeInspection */
         check_ajax_referer(strtolower( PLUGIN_NAME).'_admin');
 
-        if (array_key_exists( 'method',$_POST) && $_POST['method'] == 'stats') {
+        if (array_key_exists( 'method',$_POST) && $_POST['method'] == 'combined_logs') {
             try {
-                $stats = null;
-                wp_send_json(['is_valid' => true, 'data' => $stats, 'action' => 'stats']);
+	            $config_yaml_path = realpath( dirname( __FILE__ ) . "/../config/config.yaml" );
+	            if ( ! $config_yaml_path ) {
+		            throw new \Exception( "Cannot find the config file path at ../config/config.yaml " );
+	            }
+
+	            $config = new Config($config_yaml_path,'combined_logs');
+	            $combined = $config->get_combined_info();
+                wp_send_json(['is_valid' => true, 'data' => $combined, 'action' => 'combined_logs']);
                 die();
             } catch (\Exception $e) {
                 wp_send_json(['is_valid' => false, 'message' => $e->getMessage(), 'trace'=>$e->getTrace(), 'action' => 'stats' ]);
                 die();
             }
 
-        } elseif (array_key_exists( 'method',$_POST) && $_POST['method'] == 'list') {
+        } elseif (array_key_exists( 'method',$_POST) && $_POST['method'] == 'run') {
+	        try {
+		        $config_yaml_path = realpath( dirname( __FILE__ ) . "/../config/config.yaml" );
+		        if ( ! $config_yaml_path ) {
+			        throw new \Exception( "Cannot find the config file path at ../config/config.yaml " );
+		        }
 
-            try {
+		        $config = new Config($config_yaml_path,'combined_logs');
+		        $config->run();
+		        wp_send_json(['is_valid' => true, 'data' => null, 'action' => 'run']);
+		        die();
+	        } catch (\Exception $e) {
+		        wp_send_json(['is_valid' => false, 'message' => $e->getMessage(), 'trace'=>$e->getTrace(), 'action' => 'stats' ]);
+		        die();
+	        }
+        }
 
-                $list = null;
-                wp_send_json(['is_valid' => true, 'data' => $list, 'action' => 'list']);
-                die();
-            } catch (\Exception $e) {
-                wp_send_json(['is_valid' => false, 'message' => $e->getMessage(), 'trace'=>$e->getTrace(), 'action' => 'list' ]);
-                die();
-            }
-
-        }  else {
+        else {
             //unrecognized
             wp_send_json(['is_valid' => false, 'message' => "unknown action"]);
             die();

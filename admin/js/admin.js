@@ -3,7 +3,29 @@ var maider_ajax_req = {}; //active ajax request
 jQuery(function ($) {
 
 
+    maider_talk_to_backend('combined_logs', {}, options_success);
 
+    function options_success(d) {
+
+        var table = $('.maider-option-table tbody');
+        table.html('');
+        for(var i=0; i < d.length; i ++) {
+            var node = d[i];
+            var line = '<tr>\n' +
+                '                <td><span class="maider-option-header">' + node.title + '</span></td>\n' +
+                '                <td><span class="maider-option-key">' + node.name + '</span></td>\n' +
+                '                <td><span class="maider-option-value">' + node.value + '</span></td>\n' +
+                '                <td><span class="maider-option-result">' + node.result + '</span></td>\n' +
+                '            </tr>';
+            table.append(line);
+        }
+    }
+
+    $('#maider-do-update').click(function() {
+        maider_talk_to_backend('run', {}, function() {
+            maider_talk_to_backend('combined_logs', {}, options_success);
+        });
+    });
 });
 
 function maider_talk_to_backend(method, server_options, success_callback, error_callback) {

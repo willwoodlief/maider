@@ -1,0 +1,121 @@
+# notes:
+#  if something is both required and has a default, then it will be added into the config automatically if missing
+#  if something is required and has no default, then an error will be thrown when the config is validated
+#  if something is not required but has a default it will be included in the config automatically
+#  if something is not required and has no default then will not be included if missing and its ok
+
+# The config meta is used to check the validity of the config and so provide default options when they are missing
+sections:
+  this_plugin:
+    description: Options and Settings for how this plugin works
+    handler:
+    keys:
+      - name: security_key
+        description: used for secure remote activation to prevent others from reinstalling the site. The service will authencate itself with this key
+        examples:
+          - KabcD5534EUYyyt
+          - a base 64 string at least 15 characters long
+        allowed_values:
+          min_secret_length: 15
+        default:
+        data_type: String
+        required: true
+
+
+
+      - name: delete_self
+        description:  will delete this plugin after it does the work
+        allowed_values:
+          0: (default) will not delete
+          1: will delete
+        default: 0
+        data_type: Integer
+        required: true
+
+
+      - name: allow_remote
+        description: if not zero or null,will allow activation url to work with correct key and secret
+        allowed_values:
+          0: will not allow remote access
+          1: (default)  will allow remote access
+        default: 1
+        data_type: Integer
+        required: true
+
+
+  user:
+    description: Information about the user and site that can be used to generate documents
+    handler:
+    keys:
+
+    - name: contact_person
+      description: The name of the contact person
+      examples:
+      - Will Woodlief
+      default:
+      data_type: String
+      required: false
+
+    - name: contact_company
+      description: The name of the contact company, which can be different from the blog name in the options
+      examples:
+      - Texas Software Developers
+      default:
+      data_type: String
+      required: false
+
+
+    - name: contact_url
+      description: the url to learn more about the person/company
+      examples:
+      - 'https://marcopolo.com'
+      default:
+      data_type: String
+      required: false
+
+
+    - name: contact_address
+      description: This is the physical address for the contact
+      examples:
+      - "555 any street, Huntsville TX, 77320"
+      default:
+      data_type: String
+      required: false
+
+
+    - name: contact_email
+      description: This is the email address for the contact
+      examples:
+      - willwoodlief@gmail.com
+      default:
+      data_type: String
+      required: false
+
+
+    - name: contact_phone
+      description: This is the phone for the contact
+      examples:
+      - 936-714-2412
+      default:
+      data_type: String
+      required: false
+
+
+  options:
+    description: The Wordpress Options Which this Plugin can change
+    handler: options
+    # keys will always have: option_key and an a option_value (__RESET__ is the value to order an option reset)
+    keys: []  #validated using  the options handler
+
+
+  plugins:
+    description: a list of plugins to install and activate, or remove
+    handler: plugins
+    keys: [] #validated using  plugins handler
+
+
+  themes:
+    description: a list of themes to install or remove
+    handler: themes
+    keys: [] #validated using themes handler
+
