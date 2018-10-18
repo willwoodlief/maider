@@ -235,7 +235,7 @@ class Options {
 				}
 				$this->log->log('option',$name,$value,['is_changed'=> true,'old_value' =>$old_value,'update_option_returned'=>$update_status]);
 			} catch (\Exception $e) {
-				$this->log->log('error','options',$name,$e);
+				$this->log->log('error','option',$name,$e);
 			}
 		}
 	}
@@ -264,7 +264,7 @@ class Options {
 				$logged_options[$log_option_name] = ['title'=> 'Option','name'=>$log_option_name,
 				                                     'value'=> $log_option_value, 'result' => $result,'is_error'=>false];
 			}
-			elseif (($action === 'error') && ($log_option_name === 'options')) {
+			elseif (($action === 'error') && ($log_option_name === 'option')) {
 
 				$logged_options[$log_option_name] = ['title'=> 'Option','name'=>$log_option_name,
 				                                     'value'=> $log_option_value,

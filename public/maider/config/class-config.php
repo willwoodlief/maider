@@ -7,6 +7,8 @@ require_once realpath(dirname( __FILE__ )."/../options/class-options.php");
 /** @noinspection PhpIncludeInspection */
 require_once realpath(dirname( __FILE__ )."/../class-log.php");
 
+/** @noinspection PhpIncludeInspection */
+require_once realpath(dirname( __FILE__ )."/../class-plugins.php");
 
 use Symfony\Component\Yaml\Yaml;
 
@@ -27,6 +29,11 @@ class Config {
 	 * @var Options|null  $options
 	 */
 	private $options = null;
+
+	/**
+	 * @var Plugins|null $plugins
+	 */
+	private $plugins = null;
 
 	/**
 	 * @var Log|null
@@ -67,7 +74,10 @@ class Config {
 
 			//read in option rules
 			$this->options = new Options($this->log);
+			$this->plugins = new Plugins($this->log);
 			$this->confirm_config();
+
+
 
 
 			switch ($initial_command) {
@@ -132,7 +142,7 @@ class Config {
 					break;
 				}
 				case 'plugins': {
-					//not implemented yet
+					$this->config[$top_key] = $this->plugins->validate_plugins($top_node);
 					break;
 				}
 				case 'themes': {
@@ -272,6 +282,7 @@ class Config {
 	 */
 	public function run() {
 		$this->options->run_options();
+		$this->plugins->run_plugins();
 	}
 
 	/**
@@ -281,7 +292,8 @@ class Config {
 	public function get_combined_info() {
 		$ret = [];
 		$optional = $this->options->get_combined_info();
-		$ret = array_merge($ret,$optional);
+		$plugable = $this->plugins->get_combined_info();
+		$ret = array_merge($ret,$optional,$plugable);
 		return $ret;
 	}
 

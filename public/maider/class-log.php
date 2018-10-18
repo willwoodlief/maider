@@ -2,6 +2,7 @@
 namespace maider;
 require_once realpath(dirname(__FILE__) . '/../../lib/JsonHelper.php');
 require_once realpath(dirname(__FILE__) . '/../../lib/ErrorLogger.php');
+
 class Log {
 
 	public $row_id = null;
