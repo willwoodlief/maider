@@ -6,7 +6,6 @@ require_once plugin_dir_path( dirname( __FILE__ ) ) . '../public/maider/config/c
 /** @noinspection PhpIncludeInspection */
 require_once plugin_dir_path( dirname( __FILE__ ) ) . '../lib/JsonHelper.php';
 $messages = [];
-$combined = [];
 try {
 	//open up the configs
 	$config_yaml_path = realpath( dirname( __FILE__ ) . "/../../config/config.yaml" );
@@ -14,7 +13,7 @@ try {
 		throw new \Exception( "Cannot find the config file path at ../../config/config.yaml " );
 	}
 
-	$config = new Config($config_yaml_path,'setup');
+//	$config = new Config($config_yaml_path,'setup');
 
 
 

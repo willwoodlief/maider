@@ -1,5 +1,8 @@
 <?php
 namespace maider;
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname(__FILE__) . '/../public/maider/class-log.php');
+
 /**
  * Fired during plugin deactivation
 
@@ -20,8 +23,13 @@ class Deactivator {
 	 *
 	 * @since    1.0.0
 	 */
+	/**
+	 * @throws \Exception
+	 */
 	public static function deactivate() {
-
+		//clear logs during deactivation
+		$log = new Log();
+		$log->clear_logs();
 	}
 
 }

@@ -14,7 +14,8 @@ options:
     option_value: __RESET__
 
   - option_key: blogname
-    option_value: Will's Blog!
+    option_value: Will's Blog?
+
 
   - option_key: require_name_email
     option_value: 1
@@ -24,9 +25,8 @@ plugins:
     slug: 'install_test'
     action: 'deactivate'
 
-  - name: Test Plugin
-    slug: 'google-analytics-dashboard-for-wp'
-    action: 'delete'
+
+
 
 themes: []
 

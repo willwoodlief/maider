@@ -1,7 +1,9 @@
 <?php
 namespace maider;
-require_once realpath(dirname(__FILE__) . '/../vendor/autoload.php');
-require_once realpath(dirname(__FILE__) . '/../public/maider/class-log.php');
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname(__FILE__) . '/../vendor/autoload.php');
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname(__FILE__) . '/../public/maider/class-log.php');
 
 
 
@@ -43,6 +45,10 @@ class Activator {
 			dbDelta( $sql );
 			update_option( "_".strtolower( PLUGIN_NAME) ."_db_version" , Activator::DB_VERSION );
 		}
+
+		//clear logs if reactivated
+		$log = new Log();
+		$log->clear_logs();
 
 
 	}

@@ -87,8 +87,9 @@ class Plugins {
 
 
 	/**
-	 * Goes through the options and sees if this is a legal option with a legal value
-	 * @param array[] $options
+	 * Goes through the options and sees if this is a legal plugin with a legal value
+	 *
+	 * @param array[] $plugins
 	 *   -  each array of:
 	 *          name    : ignored, for humans
 	 *          slug    : for everything but install
@@ -100,21 +101,22 @@ class Plugins {
 	 * @return array
 	 * @throws ConfigException
 	 */
-	public function validate_plugins($options) {
+	public function validate_plugins( $plugins) {
 
 		$ret = [];
+		$copies = []; //allow only one entry per plugin
 
 		//ignore if empty
-		if (empty($options)) {
+		if (empty( $plugins)) {
 			return $ret;
 		}
 
 		//prepare for anything
-		if (!is_array($options)) {
+		if (!is_array( $plugins)) {
 			throw new ConfigException("Plugin Instructions are not seen as array in php code: ");
 		}
 
-		foreach ($options as $node) {
+		foreach ( $plugins as $node) {
 			if (!array_key_exists('action',$node)) {
 				$show = '';
 				try {
@@ -140,9 +142,11 @@ class Plugins {
 			}
 			$cow['action'] = $action;
 
+
 			if ($action === 'install') {
 				//must have a url
 				if (!array_key_exists('url',$node)) {
+					$show = '';
 					try {
 						$show = JsonHelper::toString($node);
 					} catch (\Exception $e) {
@@ -151,9 +155,11 @@ class Plugins {
 					throw new ConfigException("Plugin Instructions need a url when action is install: ". $show);
 				}
 				$cow['url'] = $node['url'];
+				$key = $node['url'];
 			} else {
 				//must have slug
 				if (!array_key_exists('slug',$node)) {
+					$show = '';
 					try {
 						$show = JsonHelper::toString($node);
 					} catch (\Exception $e) {
@@ -162,8 +168,13 @@ class Plugins {
 					throw new ConfigException("Plugin Instructions need a slug when action is deactivate|activate|delete: ". $show);
 				}
 				$cow['slug'] = $node['slug'];
+				$key = $node['slug'];
 			}
 
+			if (array_key_exists($key,$copies)) {
+				throw new ConfigException("Each Plugin must only be mentioned once in the config : $key has more than one entry");
+			}
+			$copies[$key] = $cow;
 			$ret[] = $cow;
 
 		}
@@ -187,6 +198,7 @@ class Plugins {
 			if ( ! array_key_exists( $plugin_name, $this->installed_plugins ) ) {
 				throw new ConfigException( "Cannot deactivate $plugin_name, its not on the plugin list" );
 			}
+
 			$file_path = $this->installed_plugins[ $plugin_name ]['partial'];
 			ob_start();
 			$delete_ret = delete_plugins(  [$file_path] );
@@ -401,12 +413,13 @@ class Plugins {
 		$logs = $this->log->get_log_results();
 
 		$logged_options = [];
-		//will show the last log for each option, in case there are multiple runs
+		//will show the last log for each plugin, in case there are multiple runs
 		foreach ($logs as $log) {
 			$action = $log['action'];
 			$log_name = $log['name'];
 			$log_value = $log['value']; //slug or url of plugin
 			$log_result = $log['result'];
+			$run_id = $log['run_id'];
 			if ($action === 'plugin') {
 
 				switch ($log_name) {
@@ -431,13 +444,14 @@ class Plugins {
 					}
 				}
 
-				$logged_options[$log_value] = ['title'=> 'Plugin','name'=>$log_name,
+				$logged_options[$log_value] = ['run_id' =>  $run_id,'title'=> 'Plugin','name'=>$log_name,
 				                                     'value'=> $log_value, 'result' => $result,'is_error'=>false];
 			}
 			elseif (($action === 'error') ) {
 
 				if (strpos($log_name, 'plugin') !== false) {
-					$logged_options[$log_value] = ['title'=> 'Option','name'=>$log_name,
+					$logged_options[$log_value] = [ 'run_id' =>  $run_id,
+													'title'=> 'Plugin','name'=>$log_name,
 					                               'value'=> $log_value,
 					                               'result' => $log_result['message'],
 					                               'is_error'=>true];
@@ -464,7 +478,7 @@ class Plugins {
 			}
 
 			$b_new = false;
-			if (array_key_exists($value,$logged_options)) {
+			if (array_key_exists($value,$logged_options)    ) {
 				$logged_value =  $logged_options[$value]['value'];
 				if (is_numeric($logged_value)) {
 					$logged_value = strval($logged_value);
@@ -475,7 +489,7 @@ class Plugins {
 				if ($logged_value === $value) {
 					$combined[] = $logged_options[$value];
 				} else {
-					//log was for earlier value of the option
+					//log was for earlier value of the plugin
 					$b_new = true;
 				}
 			} else {

@@ -66,6 +66,7 @@ class Options {
 	public function validate_options($options) {
 
 		$ret = [];
+		$copies = [];
 
 		foreach ($options as $node) {
 			if (!array_key_exists('option_key',$node)) {
@@ -108,6 +109,11 @@ class Options {
 						throw new ConfigException("Option of $key has a value [$value] that is not in is not in  [$list] ");
 					}
 				}
+				if (array_key_exists($key,$copies)) {
+					throw new ConfigException("Each Option must only be mentioned once in the config : $key has more than one entry");
+				}
+				$copies[$key] = $key;
+
 				$ret[] = ['option_key'=> $key, 'option_value'=>$value];
 			} else {
 				//see if its on the bad list

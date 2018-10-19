@@ -1,5 +1,14 @@
 var maider_ajax_req = {}; //active ajax request
-
+/**
+ * Typedef the information sent from ajax
+ *
+ * @typedef {Object} MaiderNode
+ * @property {string} title - the header for the information
+ * @property {string} name
+ * @property {string} value
+ * @property {string} result
+ * @property {boolean} is_error
+ */
 jQuery(function ($) {
 
 
@@ -10,8 +19,15 @@ jQuery(function ($) {
         var table = $('.maider-option-table tbody');
         table.html('');
         for(var i=0; i < d.length; i ++) {
+            /**
+             * @type {MaiderNode} node
+             */
             var node = d[i];
-            var line = '<tr>\n' +
+            var error_class = '';
+            if (node.is_error) {
+                error_class = 'maider-error';
+            }
+            var line = '<tr class="'+error_class+ '">\n' +
                 '                <td><span class="maider-option-header">' + node.title + '</span></td>\n' +
                 '                <td><span class="maider-option-key">' + node.name + '</span></td>\n' +
                 '                <td><span class="maider-option-value">' + node.value + '</span></td>\n' +

@@ -2,6 +2,10 @@
 namespace maider;
 /** @noinspection PhpIncludeInspection */
 require_once realpath( dirname( __FILE__ ) . "/../../../vendor/autoload.php");
+
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname( __FILE__ ) . "/../../../lib/ErrorLogger.php");
+
 /** @noinspection PhpIncludeInspection */
 require_once realpath(dirname( __FILE__ )."/../options/class-options.php");
 /** @noinspection PhpIncludeInspection */
@@ -39,6 +43,12 @@ class Config {
 	 * @var Log|null
 	 */
 	public  $log = null;
+
+
+	/**
+	 * @var array[] ExceptionInfo of anything wrong with the config during construction
+	 */
+	public $exception_info = [];
 	/**
 	 * Config constructor.
 	 *
@@ -47,6 +57,7 @@ class Config {
 	 * @throws \Exception
 	 */
 	public function __construct($config_path,$initial_command) {
+		$this->exception_info = [];
 		$this->log = new Log();
 		switch ($initial_command) {
 			case 'run': {
@@ -91,6 +102,7 @@ class Config {
 			}
 
 		} catch (\Exception $e) {
+			$this->exception_info[] = ErrorLogger::getExceptionInfo($e);
 			$this->log->log('error',null,null,$e);
 		}
 
@@ -291,9 +303,21 @@ class Config {
 	 */
 	public function get_combined_info() {
 		$ret = [];
+		$errors = $this->get_error_info();
 		$optional = $this->options->get_combined_info();
 		$plugable = $this->plugins->get_combined_info();
-		$ret = array_merge($ret,$optional,$plugable);
+		$ret = array_merge($ret,$errors,$optional,$plugable);
+		return $ret;
+	}
+
+	protected function get_error_info() {
+		$ret = [];
+		foreach ($this->exception_info as $ex) {
+			$ret[] = ['title'=> 'This Plugin\'s Configeration','name'=>'Start Up Error',
+			               'value'=> $ex['message'],
+			               'result' => "This needs to be fixed to allow full functionality of this plugin. Some items may not show up here until addressed",
+			               'is_error'=>true];
+		}
 		return $ret;
 	}
 

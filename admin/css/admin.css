@@ -24,3 +24,9 @@ table.maider-option-table span.maider-option-result {
     font-weight: bold;
     color: black;
 }
+
+
+
+table.maider-option-table tr.maider-error td {
+    background-color: rgba(220, 150, 231, 0.33);
+}

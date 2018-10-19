@@ -39,6 +39,7 @@ define( 'PLUGIN_NAME', 'Maider' );
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-activator.php
+ * @throws Exception
  */
 function activate_maider() {
 	/** @noinspection PhpIncludeInspection */
@@ -47,10 +48,10 @@ function activate_maider() {
 }
 
 
-
 /**
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-deactivator.php
+ * @throws Exception
  */
 function deactivate_maider() {
 	/** @noinspection PhpIncludeInspection */

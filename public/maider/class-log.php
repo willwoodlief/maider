@@ -1,7 +1,9 @@
 <?php
 namespace maider;
-require_once realpath(dirname(__FILE__) . '/../../lib/JsonHelper.php');
-require_once realpath(dirname(__FILE__) . '/../../lib/ErrorLogger.php');
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname(__FILE__) . '/../../lib/JsonHelper.php');
+/** @noinspection PhpIncludeInspection */
+require_once realpath( dirname(__FILE__) . '/../../lib/ErrorLogger.php');
 
 class Log {
 
@@ -142,7 +144,7 @@ class Log {
             select id,run_id,created_at, unix_timestamp(created_at) as created_at_timestamp,
               action_name,op_name,op_value,op_result
             from $table_name 
-            where 1 order by id;;
+            where 1 order by id;
             ");
 
 		if ($wpdb->last_error) {

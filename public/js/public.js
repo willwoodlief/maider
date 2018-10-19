@@ -1,3 +1,4 @@
+// noinspection JSUnusedGlobalSymbols
 function maider_talk_to_frontend(method, server_options, success_callback, error_callback) {
 
     if (!server_options) {
