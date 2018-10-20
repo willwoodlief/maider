@@ -1,1 +1,0 @@
- git commit -m "Added Self Delete Code. The delete_self has to be set to true in the this_plugin section of the config. Only activated during remote run. Will append that last log result to the rest of the logs. Changed log class to only return one log, changed plugins delete to always return that one log"

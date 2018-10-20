@@ -136,11 +136,25 @@ sections:
   plugins:
     description: a list of plugins to install and activate, or remove
     handler: plugins
+    # keys
+              #    *   - each array of:
+              #    *          name: ignored, for humans
+              #    *          slug: for everything but install
+              #    *          resource: only for install. Can be a url, slug or file path
+              #    *          action: install|deactivate|activate|delete
+    # see wp-content/plugins/maider/public/maider/class-plugins.php validate_plugins()
     keys: [] #validated using  plugins handler
 
 
   themes:
     description: a list of themes to install or remove
     handler: themes
+    #  key
+              #    *   - each array of:
+              #    *          name: ignored, for humans
+              #    *          slug: for everything but install
+              #    *          resource: only for install, can be a slug, url or file path
+              #    *          action: install|switch|delete
+    #  see  wp-content/plugins/maider/public/maider/class-themes.php validate_themes()
     keys: [] #validated using themes handler
 

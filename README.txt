@@ -1,20 +1,18 @@
-=== Will's Plugin Template  ===
- to change, substitute the word maider for the new plugin name and then change the file name to the new plugin name
+=== Maider Plugin  ===
+
+ This plugin , once installed will manage options, plugins and themes automatically
 
 
 == Description ==
 
 Install by
 
-1) unzipping and putting into wp-content/plugins directory
+1) Creating a new config, matching the config rules set in wp-content/plugins/maider/public/maider/config/config_meta.yaml
+2) zipping up this plugin, or putting the config in an already zipped plugin
+1) on the wordpress install unzipping and putting into wp-content/plugins directory
 2) going into wordpress and clicking install for the plugin
 
-== To use ==
 
-Shortcode
-[plugin_name]
-Optional text or html
-[/plugin_name]
 
 
 
