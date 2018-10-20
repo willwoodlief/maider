@@ -156,7 +156,7 @@ class Themes {
 					} catch (\Exception $e) {
 
 					}
-					throw new ConfigException("Theme Instructions need a url when action is install: ". $show);
+					throw new ConfigException("Theme Instructions need a resource when action is install: ". $show);
 				}
 				$cow['resource'] = $node['resource'];
 				$key = $node['resource'];

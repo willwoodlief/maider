@@ -152,7 +152,7 @@ class Plugins {
 					} catch (\Exception $e) {
 
 					}
-					throw new ConfigException("Plugin Instructions need a url when action is install: ". $show);
+					throw new ConfigException("Plugin Instructions need a resource when action is install: ". $show);
 				}
 				$cow['resource'] = $node['resource'];
 				$key = $node['resource'];
