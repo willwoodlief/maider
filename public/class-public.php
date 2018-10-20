@@ -360,10 +360,11 @@ class Plugin_Public
 					try {
 
 						$config->run();
+						$what = $config->log->get_log_results();
 						if ( $b_json ) {
-							JsonHelper::printStatusJSONAndDie( 'ran operation. Do logs command to see the logs' );
+							JsonHelper::printStatusJSONAndDie( $what );
 						} else {
-							JsonHelper::print_nice( 'ran operation. Do logs command to see the logs' );
+							JsonHelper::print_nice( $what );
 						}
 						die();
 					} catch ( \Exception $e ) {

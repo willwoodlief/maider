@@ -268,14 +268,16 @@ class Options {
 					$result = "Same Value";
 				}
 				$logged_options[$log_option_name] = ['title'=> 'Option','name'=>$log_option_name,
-				                                     'value'=> $log_option_value, 'result' => $result,'is_error'=>false];
+				                                     'value'=> $log_option_value, 'result' => $result,'is_error'=>false,
+				                                     'has_run' => true];
 			}
 			elseif (($action === 'error') && ($log_option_name === 'option')) {
 
 				$logged_options[$log_option_name] = ['title'=> 'Option','name'=>$log_option_name,
 				                                     'value'=> $log_option_value,
 				                                     'result' => $log_option_result['message'],
-				                                     'is_error'=>true];
+				                                     'is_error'=>true,
+				                                     'has_run' => true];
 			} else {
 				continue;
 			}
@@ -312,7 +314,8 @@ class Options {
 				$combined[] = ['title'=> 'Option','name'=>$key,
 				               'value'=> $value,
 				               'result' => "Not Run Yet",
-				               'is_error'=>false];
+				               'is_error'=>false,
+								'has_run' => false];
 			}
 		}
 

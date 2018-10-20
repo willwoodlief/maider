@@ -11,7 +11,18 @@ table.maider-option-table span.maider-option-header {
 table.maider-option-table span.maider-option-key {
     font-size: 1.25em;
     font-weight: bold;
+}
+
+table.maider-option-table span.maider-option-key.option {
+    color: cadetblue;
+}
+
+
+table.maider-option-table span.maider-option-key.action {
     color: darkblue;
+    border: darkblue outset 1px;
+    padding: 0.3em;
+    display: inline-block;
 }
 table.maider-option-table span.maider-option-value {
     font-size: 1.25em;

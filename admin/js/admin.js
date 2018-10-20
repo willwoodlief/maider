@@ -8,36 +8,52 @@ var maider_ajax_req = {}; //active ajax request
  * @property {string} value
  * @property {string} result
  * @property {boolean} is_error
+ * @property {boolean} has_run
  */
 jQuery(function ($) {
 
-
+    $('.maider-load-icon').show();
     maider_talk_to_backend('combined_logs', {}, options_success);
 
     function options_success(d) {
-
+        $('.maider-load-icon').hide();
         var table = $('.maider-option-table tbody');
         table.html('');
+        var b_all_has_run = true;
         for(var i=0; i < d.length; i ++) {
             /**
              * @type {MaiderNode} node
              */
             var node = d[i];
+            if (!node.has_run) {
+                b_all_has_run = false;
+            }
             var error_class = '';
             if (node.is_error) {
                 error_class = 'maider-error';
             }
+
+            var name_class = 'option';
+            if (node.title !== 'Option') {
+                name_class = 'action';
+            }
             var line = '<tr class="'+error_class+ '">\n' +
                 '                <td><span class="maider-option-header">' + node.title + '</span></td>\n' +
-                '                <td><span class="maider-option-key">' + node.name + '</span></td>\n' +
+                '                <td><span class="maider-option-key '+ name_class + '">' + node.name + '</span></td>\n' +
                 '                <td><span class="maider-option-value">' + node.value + '</span></td>\n' +
                 '                <td><span class="maider-option-result">' + node.result + '</span></td>\n' +
                 '            </tr>';
             table.append(line);
         }
+
+        if (b_all_has_run) {
+            $('#maider-do-update').prop('disabled',true).css('color', 'lightgray');
+            $('.maider-already-run').show();
+        }
     }
 
     $('#maider-do-update').click(function() {
+        $('.maider-load-icon').show();
         maider_talk_to_backend('run', {}, function() {
             maider_talk_to_backend('combined_logs', {}, options_success);
         });

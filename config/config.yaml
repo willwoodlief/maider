@@ -1,7 +1,9 @@
 this_plugin:
   security_key: KabcD5534EUYyyt
-  delete_self: true
+  delete_self: false
   allow_remote: true
+  master_name: Best Beef and Burger
+  master_url: 'https://news.google.com'
 
 user:
   contact_person: Will Woodlief
@@ -20,13 +22,19 @@ options:
   - option_key: require_name_email
     option_value: 1
 
+
+
 plugins:
-  - name: Test Plugin
-    slug: 'install_test'
-    action: 'deactivate'
+
+
+#  - name: Random Thing
+#    slug: duplicate-post
+#    action: 'delete'
 
 
 
 
-themes: []
-
+themes:
+  - name: Sample Theme
+    slug: twentyseventeen
+    action: switch

@@ -14,6 +14,9 @@ require_once realpath(dirname( __FILE__ )."/../class-log.php");
 /** @noinspection PhpIncludeInspection */
 require_once realpath(dirname( __FILE__ )."/../class-plugins.php");
 
+/** @noinspection PhpIncludeInspection */
+require_once realpath(dirname( __FILE__ )."/../class-themes.php");
+
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -38,6 +41,12 @@ class Config {
 	 * @var Plugins|null $plugins
 	 */
 	private $plugins = null;
+
+
+	/**
+	 * @var Themes|null $plugins
+	 */
+	private $themes = null;
 
 	/**
 	 * @var Log|null
@@ -86,6 +95,7 @@ class Config {
 			//read in option rules
 			$this->options = new Options($this->log);
 			$this->plugins = new Plugins($this->log);
+			$this->themes = new Themes($this->log);
 			$this->confirm_config();
 
 
@@ -158,7 +168,7 @@ class Config {
 					break;
 				}
 				case 'themes': {
-					//not implemented yet
+					$this->config[$top_key] = $this->themes->validate_themes($top_node);
 					break;
 				}
 				default: {
@@ -293,8 +303,19 @@ class Config {
 	 * @throws SecondTryException
 	 */
 	public function run() {
-		$this->options->run_options();
-		$this->plugins->run_plugins();
+
+
+		if ($this->options) {
+			$this->options->run_options();
+		}
+
+		if ($this->plugins) {
+			$this->plugins->run_plugins();
+		}
+
+		if ($this->themes) {
+			$this->themes->run_themes();
+		}
 	}
 
 	/**
@@ -302,11 +323,24 @@ class Config {
 	 * @throws \Exception
 	 */
 	public function get_combined_info() {
-		$ret = [];
+		$ret = $errors = $optional = $plugable =  $themable = [];
 		$errors = $this->get_error_info();
-		$optional = $this->options->get_combined_info();
-		$plugable = $this->plugins->get_combined_info();
-		$ret = array_merge($ret,$errors,$optional,$plugable);
+
+		if ($this->options) {
+			$optional = $this->options->get_combined_info();
+		}
+
+		if ($this->plugins) {
+			$plugable = $this->plugins->get_combined_info();
+		}
+
+		if ($this->themes) {
+			$themable = $this->themes->get_combined_info();
+		}
+
+
+
+		$ret = array_merge($ret,$errors,$optional,$plugable,$themable);
 		return $ret;
 	}
 

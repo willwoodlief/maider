@@ -42,6 +42,20 @@ sections:
         data_type: Integer
         required: true
 
+      - name: master_name
+        description: The name of the site where the configerations are created and set to this plugin
+        examples:
+          - Maider Home
+        data_type: String
+        required: true
+
+      - name: master_url
+        description: The url of the site where the configerations are created and set to this plugin
+        examples:
+        - 'https://www.maiderhome.com'
+        data_type: String
+        required: true
+
 
   user:
     description: Information about the user and site that can be used to generate documents

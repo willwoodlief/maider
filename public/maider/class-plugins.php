@@ -93,7 +93,7 @@ class Plugins {
 	 *   -  each array of:
 	 *          name    : ignored, for humans
 	 *          slug    : for everything but install
-	 *          url     : only for install
+	 *          resource  : only for install. Can be a url, slug or file path
 	 *          action  : install|deactivate|activate|delete
 	 *
 	 *
@@ -144,8 +144,8 @@ class Plugins {
 
 
 			if ($action === 'install') {
-				//must have a url
-				if (!array_key_exists('url',$node)) {
+				//must have a resource
+				if (!array_key_exists('resource',$node)) {
 					$show = '';
 					try {
 						$show = JsonHelper::toString($node);
@@ -154,8 +154,8 @@ class Plugins {
 					}
 					throw new ConfigException("Plugin Instructions need a url when action is install: ". $show);
 				}
-				$cow['url'] = $node['url'];
-				$key = $node['url'];
+				$cow['resource'] = $node['resource'];
+				$key = $node['resource'];
 			} else {
 				//must have slug
 				if (!array_key_exists('slug',$node)) {
@@ -181,9 +181,6 @@ class Plugins {
 		$this->runnable_plugins = $ret;
 		return $ret;
 
-
-
-		//todo new \Theme_Upgrader();
 	}
 
 
@@ -196,7 +193,7 @@ class Plugins {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		try {
 			if ( ! array_key_exists( $plugin_name, $this->installed_plugins ) ) {
-				throw new ConfigException( "Cannot deactivate $plugin_name, its not on the plugin list" );
+				throw new ConfigException( "Cannot delete $plugin_name, its not on the plugin list" );
 			}
 
 			$file_path = $this->installed_plugins[ $plugin_name ]['partial'];
@@ -318,9 +315,22 @@ class Plugins {
 				if (strstr($url, '.zip') != FALSE) {
 					$download_link = $url;
 				} else {
-					$slug = explode('/', $url);
-					$slug = $slug[count($slug) - 2];
+					$slug = $url;
+					$slug_test = explode('/', $url);
+					if (sizeof($slug_test) >= 2) {
+						$slug = $slug_test[count($slug_test) - 2];
+					}
+
 					$api = plugins_api('plugin_information', array('slug' => $slug, 'fields' => array('sections' => 'false')));
+					if (is_wp_error($api)) {
+						$messages = $api->get_error_messages();
+						if (empty($messages)) {
+							$error_message = "WP Error Class returned but no information given";
+						} else {
+							$error_message = implode(', ', $messages);
+						}
+						throw new ConfigException("Could not find plugin of $url because: $error_message");
+					}
 					$download_link = $api->download_link;
 				}
 
@@ -337,14 +347,20 @@ class Plugins {
 				$upgrade_ret = $upgrader->install($download_link);
 				$results = ob_get_contents();
 				if (ob_get_length()) ob_end_clean();
+				if (is_null($upgrade_ret)) {
+					throw new ConfigException("Could not install plugin of $url, is it already installed? -> ". $results);
+				}
+				if ($upgrade_ret === false) {
+					throw new ConfigException("Could not install plugin of $url, unknown error -> ".  $results  );
+				}
 				if (is_wp_error($upgrade_ret)) {
 					$messages = $upgrade_ret->get_error_messages();
 					if (empty($messages)) {
-						$error_message = "WP Error Class returned but no information given";
+						$error_message = "WP Error Class returned but no information given -> ". $results;
 					} else {
 						$error_message = implode(', ', $messages);
 					}
-					throw new ConfigException("Could not install plugin of $url because: $error_message");
+					throw new ConfigException("Could not install plugin of $url because: $error_message -> ". $results);
 				}
 
 
@@ -380,7 +396,7 @@ class Plugins {
 			$action = $r['action'];
 			switch ($action) {
 				case 'install': {
-					$this->install_plugin($r['url']);
+					$this->install_plugin($r['resource']);
 					break;
 				}
 				case 'delete': {
@@ -417,7 +433,7 @@ class Plugins {
 		foreach ($logs as $log) {
 			$action = $log['action'];
 			$log_name = $log['name'];
-			$log_value = $log['value']; //slug or url of plugin
+			$log_value = $log['value']; //slug or url or file path of plugin
 			$log_result = $log['result'];
 			$run_id = $log['run_id'];
 			if ($action === 'plugin') {
@@ -445,7 +461,8 @@ class Plugins {
 				}
 
 				$logged_options[$log_value] = ['run_id' =>  $run_id,'title'=> 'Plugin','name'=>$log_name,
-				                                     'value'=> $log_value, 'result' => $result,'is_error'=>false];
+				                                     'value'=> $log_value, 'result' => $result,'is_error'=>false,
+				                               'has_run' => true];
 			}
 			elseif (($action === 'error') ) {
 
@@ -454,7 +471,8 @@ class Plugins {
 													'title'=> 'Plugin','name'=>$log_name,
 					                               'value'=> $log_value,
 					                               'result' => $log_result['message'],
-					                               'is_error'=>true];
+					                               'is_error'=>true,
+					                                'has_run' => true];
 				} else {
 					continue;
 				}
@@ -472,7 +490,7 @@ class Plugins {
 		foreach ($plugins_to_show as $op) {
 			$key = $op['action'];
 			if ($key === 'install') {
-				$value = $op['url'];
+				$value = $op['resource'];
 			} else {
 				$value = $op['slug'];
 			}
@@ -500,7 +518,8 @@ class Plugins {
 				$combined[] = ['title'=> 'Plugin','name'=>$key,
 				               'value'=> $value,
 				               'result' => "Not Run Yet",
-				               'is_error'=>false];
+				               'is_error'=>false,
+				               'has_run' => false];
 			}
 		}
 
