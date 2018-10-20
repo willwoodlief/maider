@@ -42,6 +42,15 @@ sections:
         data_type: Integer
         required: true
 
+      - name: allow_manual_run
+        description: if not zero or null, then the user can run the config in the admin back panel
+        allowed_values:
+          0: will not allow remote access
+          1: (default)  will allow remote access
+        default: 1
+        data_type: Integer
+        required: true
+
       - name: master_name
         description: The name of the site where the configerations are created and set to this plugin
         examples:
@@ -55,6 +64,8 @@ sections:
         - 'https://www.maiderhome.com'
         data_type: String
         required: true
+
+
 
 
   user:

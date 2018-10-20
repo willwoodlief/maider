@@ -261,12 +261,23 @@ class Config {
 			}
 
 			unset($copy[$name]);
+			if (is_integer($node[$name])) {
+				$node[$name] = intval($node[$name]);
+			}
 		}
 
 		if (!empty($copy)) {
 			$left_overs = implode(',',array_keys($copy));
 			throw new ConfigException("Config Section $section_name has left over keys [$left_overs] that are not on the list of accepted keys");
 		}
+
+		if ($section_name === 'this_plugin') {
+			//finally check to make sure that allow_manual_run and allow_remote and not both set to false
+			if (!$node['allow_manual_run'] && !$node['allow_remote']) {
+				throw new ConfigException("allow_manual_run and allow_remote and both turned off. This means nothing can run the config. You need to let at least one group run this");
+			}
+		}
+
 
 		return $node;
 	}

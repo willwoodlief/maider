@@ -41,3 +41,20 @@ table.maider-option-table span.maider-option-result {
 table.maider-option-table tr.maider-error td {
     background-color: rgba(220, 150, 231, 0.33);
 }
+
+span.maider-home-name {
+    font-weight: bolder;
+    font-style: italic;
+}
+
+div.maider-notice {
+    position: relative;
+    overflow: auto;
+    margin: 16px 0;
+    padding: 23px 10px 0;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+    background: #fff;
+    font-size: 13px;
+    line-height: 2.1em;
+}
