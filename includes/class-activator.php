@@ -24,7 +24,7 @@ class Activator {
 	 * @since    1.0.0
 	 */
 
-	const DB_VERSION = 0.11;
+	const DB_VERSION = 0.13;
 
 
 	/**

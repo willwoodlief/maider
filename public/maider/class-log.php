@@ -38,7 +38,7 @@ class Log {
 
 		//do response table
 
-		$sql = "CREATE TABLE `{$table_start}logs` (
+		$sql = "CREATE TABLE `{$table_start}` (
               id int NOT NULL AUTO_INCREMENT,
               run_id int default null,
               created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
