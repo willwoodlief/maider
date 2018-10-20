@@ -327,6 +327,30 @@ class Config {
 		if ($this->themes) {
 			$this->themes->run_themes();
 		}
+
+	}
+
+	/**
+	 * this needs to be called after any other thing needed as it could delete the files
+	 * @return array  - the log for this single action
+	 * @throws \Exception
+	 */
+	public function maybe_self_delete_now() {
+		//handle self delete
+		if (array_key_exists('delete_self',$this->config['this_plugin'])) {
+			if ($this->config['this_plugin']['delete_self']) {
+				if ($this->plugins) {
+					return $this->plugins->delete_plugin(strtolower(PLUGIN_NAME));
+				}
+			} else {
+				$log_id = $this->log->log('run','delete_self',"not set",null);
+				$new_log =  $this->log->get_log_results($log_id);
+				return $new_log[0];
+			}
+		}
+		$log_id = $this->log->log('run','delete_self',"missing delete_self in config",null);
+		$new_log =  $this->log->get_log_results($log_id);
+		return $new_log[0];
 	}
 
 	/**

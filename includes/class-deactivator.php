@@ -28,8 +28,10 @@ class Deactivator {
 	 */
 	public static function deactivate() {
 		//clear logs during deactivation
-		$log = new Log();
-		$log->clear_logs();
+//		$log = new Log();
+//		$log->clear_logs();
+
+		//do not clear logs, logs are cleared when plugin installed or reactivated
 	}
 
 }

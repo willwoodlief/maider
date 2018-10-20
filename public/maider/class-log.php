@@ -131,20 +131,26 @@ class Log {
 	}
 
 	/**
+	 * @param integer $log_id, default null. If specified, then will only get log for that id
 	 * @return array|null|object
 	 * @throws \Exception
 	 */
-	public function get_log_results() {
+	public function get_log_results($log_id=null) {
 		global $wpdb;
 		$ret = [];
 		$table_name = self::get_log_table_name();
+		$where_string = ' 1 ';
+		if ($log_id) {
+			$log_id = intval($log_id);
+			$where_string =  " id = $log_id ";
+		}
 		/** @noinspection SqlResolve */
 		$res = $wpdb->get_results(
 			" 
             select id,run_id,created_at, unix_timestamp(created_at) as created_at_timestamp,
               action_name,op_name,op_value,op_result
             from $table_name 
-            where 1 order by id;
+            where $where_string order by id;
             ");
 
 		if ($wpdb->last_error) {

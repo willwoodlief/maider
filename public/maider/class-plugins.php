@@ -186,10 +186,9 @@ class Plugins {
 
 	/**
 	 * @param String $plugin_name - plugin slug
-	 *
-	 * @throws SecondTryException
+	 * @return array[]  - array of log on success or most errors, but in extreme failure may return the array info of the exception itself
 	 */
-	protected function delete_plugin($plugin_name) {
+	public function delete_plugin($plugin_name) {
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 		try {
 			if ( ! array_key_exists( $plugin_name, $this->installed_plugins ) ) {
@@ -217,9 +216,26 @@ class Plugins {
 
 
 
-			$this->log->log('plugin','delete',$plugin_name,$results);
+			$log_id = $this->log->log('plugin','delete',$plugin_name,$results);
+			$new_log =  $this->log->get_log_results($log_id);
+			return $new_log[0];
+
 		} catch (\Exception $e) {
-			$this->log->log('error','delete_plugin',$plugin_name,$e);
+			try {
+				$log_id = $this->log->log('error','delete_plugin',$plugin_name,$e);
+				$new_log =  $this->log->get_log_results($log_id);
+				return $new_log[0];
+			} catch (\Exception $g) {
+				$parent =  ErrorLogger::getExceptionInfo($e);
+				$child = ErrorLogger::getExceptionInfo($g);
+				if (empty($parent['chained'])) {
+					$parent['chained'] = [];
+				}
+				$parent['chained'][] = $child;
+				return $parent;
+			}
+
+
 		}
 	}
 

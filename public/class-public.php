@@ -361,6 +361,8 @@ class Plugin_Public
 
 						$config->run();
 						$what = $config->log->get_log_results();
+						$self_delete_log = $config->maybe_self_delete_now();
+						$what[] = $self_delete_log;
 						if ( $b_json ) {
 							JsonHelper::printStatusJSONAndDie( $what );
 						} else {

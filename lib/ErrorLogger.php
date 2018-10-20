@@ -119,10 +119,6 @@ class  ErrorLogger {
     		JsonHelper::print_nice($info);
     		die("Cannot save or process Exception of ". $e->getMessage());
 	    }
-	    catch (\ReflectionException $r) {
-		    JsonHelper::print_nice($info);
-		    die("Cannot save or process Exception of ". $r->getMessage());
-	    }
     }
 
 	/**
@@ -200,13 +196,9 @@ class  ErrorLogger {
 			self::$last_error_id = $parent_id;
 			return $parent_id;
 		} catch (\Exception $e) {
-			try {
-				$info['outer_exception'] = self::getExceptionInfo($e);
-				$foolproof = print_r($info,true);
-				throw new SecondTryException($foolproof);
-			} catch (\ReflectionException $r) {
-				throw new SecondTryException($r->getMessage());
-			}
+			$info['outer_exception'] = self::getExceptionInfo($e);
+			$foolproof = print_r($info,true);
+			throw new SecondTryException($foolproof);
 		}
 
 	}
@@ -287,7 +279,7 @@ class  ErrorLogger {
      *      string      'trace_as_string' => the trace in an easier to read string format
      *      array|null  'chained' => an array of exceptions chained to this one, with the same info as above
      * </p>
-     * @throws \ReflectionException
+     *
      */
 
     public static function getExceptionInfo($e) {
