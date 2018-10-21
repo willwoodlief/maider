@@ -264,7 +264,8 @@ class Admin {
 
 		        $config = new Config($config_yaml_path,'combined_logs');
 		        $config->run();
-		        wp_send_json(['is_valid' => true, 'data' => null, 'action' => 'run']);
+		        $combined = $config->get_combined_info();
+		        wp_send_json(['is_valid' => true, 'data' => $combined, 'action' => 'run']);
 		        die();
 	        } catch (\Exception $e) {
 		        wp_send_json(['is_valid' => false, 'message' => $e->getMessage(), 'trace'=>$e->getTrace(), 'action' => 'stats' ]);

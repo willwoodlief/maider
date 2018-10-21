@@ -54,9 +54,7 @@ jQuery(function ($) {
 
     $('#maider-do-update').click(function() {
         $('.maider-load-icon').show();
-        maider_talk_to_backend('run', {}, function() {
-            maider_talk_to_backend('combined_logs', {}, options_success);
-        });
+        maider_talk_to_backend('run', {}, options_success);
     });
 });
 
